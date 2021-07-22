@@ -31,7 +31,8 @@ vec3 ray_color(const ray &r, const hittable &world, int depth)
 int main()
 {
     ofstream ou;
-    ou.open("C:\\Users\\jnjnjnzhang\\Desktop\\cpp\\Tracing\\image.ppm");
+    ou.open(strtx);
+    //ou.open(strtx);
     const int image_width = 200;
     const int image_height = 100;
     const int samples_per_pixel = 100;

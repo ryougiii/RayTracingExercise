@@ -4,6 +4,8 @@
 #include "ray.h"
 #include "rtweekend.h"
 #include <iostream>
+
+std::string strtx = "C:\\Users\\jnjnjnzhang\\Documents\\GitHub\\RayTracing\\Tracing\\image.ppm";
 class vec3
 {
 public:
