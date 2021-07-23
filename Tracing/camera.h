@@ -4,11 +4,12 @@ public:
     camera(
         vec3 lookfrom, vec3 lookat, vec3 vup,
         double vfov, // top to bottom, in degrees
-        double aspect, double aperture, double focus_dist)
+        double aspect, double aperture, double focus_dist, double t0 = 0, double t1 = 0)
     {
         origin = lookfrom;
         lens_radius = aperture / 2;
-
+        time0 = t0;
+        time1 = t1;
         auto theta = degrees_to_radians(vfov);
         auto half_height = tan(theta / 2);
         auto half_width = aspect * half_height;
@@ -29,7 +30,8 @@ public:
 
         return ray(
             origin + offset,
-            lower_left_corner + s * horizontal + t * vertical - origin - offset);
+            lower_left_corner + s * horizontal + t * vertical - origin - offset,
+            +random_double(time0, time1));
     }
 
 public:
@@ -39,4 +41,5 @@ public:
     vec3 vertical;
     vec3 u, v, w;
     double lens_radius;
+    double time0, time1;
 };
