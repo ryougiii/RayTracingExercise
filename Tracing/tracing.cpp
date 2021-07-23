@@ -16,7 +16,7 @@ vec3 ray_color(const ray &r, const hittable &world, int depth)
     if (depth <= 0)
         return vec3(0, 0, 0);
 
-    if (world.hit(r, 0.001, infinity, rec))
+    if (world.hit(r, 0.001, infinity, rec)) //调用了子类的hit方法
     {
         vec3 target = rec.p + random_in_hemisphere(rec.normal);
         return 0.5 * ray_color(ray(rec.p, target - rec.p), world, depth - 1);
@@ -33,10 +33,10 @@ int main()
     ofstream ou;
     ou.open(strtx);
     //ou.open(strtx);
-    const int image_width = 200;
-    const int image_height = 100;
+    const int image_width = 500;
+    const int image_height = 250;
     const int samples_per_pixel = 100;
-    const int max_depth = 50;
+    const int max_depth = 5;
 
     ou << "P3\n"
        << image_width << " " << image_height << "\n255\n";
