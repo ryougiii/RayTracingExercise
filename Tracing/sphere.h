@@ -12,6 +12,7 @@ public:
     sphere(vec3 cen, double r) : center(cen), radius(r){};
     sphere(vec3 cen, double r, shared_ptr<material> m) : center(cen), radius(r), mat_ptr(m){};
     virtual bool hit(const ray &r, double tmin, double tmax, hit_record &rec) const;
+    virtual bool bounding_box(double t0, double t1, aabb &output_box) const;
 
 public:
     vec3 center;
@@ -19,7 +20,7 @@ public:
     shared_ptr<material> mat_ptr;
 };
 
-//sphere.h 加入射入面判别
+//加入射入面判别
 bool sphere::hit(const ray &r, double t_min, double t_max, hit_record &rec) const
 {
     vec3 oc = r.origin() - center;
@@ -54,17 +55,22 @@ bool sphere::hit(const ray &r, double t_min, double t_max, hit_record &rec) cons
     }
     return false;
 }
-
+bool sphere::bounding_box(double t0, double t1, aabb &output_box) const
+{
+    output_box = aabb(
+        center - vec3(radius, radius, radius),
+        center + vec3(radius, radius, radius));
+    return true;
+}
 class moving_sphere : public hittable
 {
 public:
     moving_sphere() {}
-    moving_sphere(
-        vec3 cen0, vec3 cen1, double t0, double t1, double r, shared_ptr<material> m)
+    moving_sphere(vec3 cen0, vec3 cen1, double t0, double t1, double r, shared_ptr<material> m)
         : center0(cen0), center1(cen1), time0(t0), time1(t1), radius(r), mat_ptr(m){};
 
     virtual bool hit(const ray &r, double tmin, double tmax, hit_record &rec) const;
-
+    virtual bool bounding_box(double t0, double t1, aabb &output_box) const;
     vec3 center(double time) const;
 
 public:
@@ -115,6 +121,29 @@ bool moving_sphere::hit(const ray &r, double t_min, double t_max, hit_record &re
         }
     }
     return false;
+}
+
+bool moving_sphere::bounding_box(double t0, double t1, aabb &output_box) const
+{
+    aabb box0(
+        center(t0) - vec3(radius, radius, radius),
+        center(t0) + vec3(radius, radius, radius));
+    aabb box1(
+        center(t1) - vec3(radius, radius, radius),
+        center(t1) + vec3(radius, radius, radius));
+    output_box = surrounding_box(box0, box1);
+    return true;
+}
+
+aabb surrounding_box(aabb box0, aabb box1)
+{
+    vec3 small(ffmin(box0.min().x(), box1.min().x()),
+               ffmin(box0.min().y(), box1.min().y()),
+               ffmin(box0.min().z(), box1.min().z()));
+    vec3 big(ffmax(box0.max().x(), box1.max().x()),
+             ffmax(box0.max().y(), box1.max().y()),
+             ffmax(box0.max().z(), box1.max().z()));
+    return aabb(small, big);
 }
 
 #endif

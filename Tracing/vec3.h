@@ -6,6 +6,7 @@
 #include <iostream>
 
 std::string strtx = "C:\\Users\\jnjnjnzhang\\Documents\\GitHub\\RayTracing\\Tracing\\image.ppm";
+std::string strho = "C:\\Users\\ryo\\Desktop\\RayTracingProject\\RayTracing\\Tracing\\image.ppm";
 class vec3
 {
 public:

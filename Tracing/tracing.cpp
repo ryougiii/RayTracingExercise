@@ -84,11 +84,11 @@ hittable_list random_scene()
 int main()
 {
     ofstream ou;
-    ou.open(strtx);
     //ou.open(strtx);
+    ou.open(strho);
     const int image_width = 500;
     const int image_height = 250;
-    const int samples_per_pixel = 20;
+    const int samples_per_pixel = 10;
     const int max_depth = 20;
 
     ou << "P3\n"
