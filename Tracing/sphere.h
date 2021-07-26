@@ -123,6 +123,17 @@ bool moving_sphere::hit(const ray &r, double t_min, double t_max, hit_record &re
     return false;
 }
 
+aabb surrounding_box(aabb box0, aabb box1)
+{
+    vec3 small(ffmin(box0.min().x(), box1.min().x()),
+               ffmin(box0.min().y(), box1.min().y()),
+               ffmin(box0.min().z(), box1.min().z()));
+    vec3 big(ffmax(box0.max().x(), box1.max().x()),
+             ffmax(box0.max().y(), box1.max().y()),
+             ffmax(box0.max().z(), box1.max().z()));
+    return aabb(small, big);
+}
+
 bool moving_sphere::bounding_box(double t0, double t1, aabb &output_box) const
 {
     aabb box0(
@@ -133,17 +144,6 @@ bool moving_sphere::bounding_box(double t0, double t1, aabb &output_box) const
         center(t1) + vec3(radius, radius, radius));
     output_box = surrounding_box(box0, box1);
     return true;
-}
-
-aabb surrounding_box(aabb box0, aabb box1)
-{
-    vec3 small(ffmin(box0.min().x(), box1.min().x()),
-               ffmin(box0.min().y(), box1.min().y()),
-               ffmin(box0.min().z(), box1.min().z()));
-    vec3 big(ffmax(box0.max().x(), box1.max().x()),
-             ffmax(box0.max().y(), box1.max().y()),
-             ffmax(box0.max().z(), box1.max().z()));
-    return aabb(small, big);
 }
 
 #endif

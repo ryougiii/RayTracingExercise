@@ -1,12 +1,34 @@
 #ifndef VEC_H
 #define VEC_H
 
-#include "ray.h"
-#include "rtweekend.h"
+#include <cmath>
 #include <iostream>
+#include <stdlib.h>
 
 std::string strtx = "C:\\Users\\jnjnjnzhang\\Documents\\GitHub\\RayTracing\\Tracing\\image.ppm";
 std::string strho = "C:\\Users\\ryo\\Desktop\\RayTracingProject\\RayTracing\\Tracing\\image.ppm";
+const double infinity = 1e18;
+const double pi = 3.1415926535897932385;
+inline double clamp(double x, double min, double max)
+{
+    if (x < min)
+        return min;
+    if (x > max)
+        return max;
+    return x;
+}
+inline double random_double()
+{
+    // Returns a random real in [0,1).
+    return rand() / (RAND_MAX + 1.0);
+}
+
+inline double random_double(double min, double max)
+{
+    // Returns a random real in [min,max).
+    return min + (max - min) * random_double();
+}
+
 class vec3
 {
 public:
@@ -128,6 +150,9 @@ inline vec3 cross(const vec3 &u, const vec3 &v)
                 u.e[0] * v.e[1] - u.e[1] * v.e[0]);
 }
 
+inline double ffmin(double a, double b) { return a <= b ? a : b; }
+inline double ffmax(double a, double b) { return a >= b ? a : b; }
+
 inline vec3 unit_vector(vec3 v)
 {
     return v / v.length();
@@ -184,4 +209,5 @@ vec3 random_in_unit_disk()
         return p;
     }
 }
+
 #endif

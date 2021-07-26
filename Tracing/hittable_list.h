@@ -3,6 +3,7 @@
 #define HITTABLE_LIST_H
 
 #include "hittable.h"
+#include "sphere.h"
 #include <memory>
 #include <vector>
 
@@ -37,7 +38,7 @@ public:
         return hit_anything;
     }
 
-    bool hittable_list::bounding_box(double t0, double t1, aabb &output_box) const
+    bool bounding_box(double t0, double t1, aabb &output_box) const
     {
         if (objects.empty())
             return false;

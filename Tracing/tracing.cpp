@@ -1,10 +1,12 @@
 //main.cc
 #include "rtweekend.h"
 
+#include "bvh.h"
 #include "camera.h"
 #include "hittable_list.h"
 #include "material.h"
 #include "sphere.h"
+#include <ctime>
 #include <fstream>
 #include <iostream>
 using namespace std;
@@ -77,18 +79,21 @@ hittable_list random_scene()
     world.add(make_shared<sphere>(
         vec3(4, 1, 0), 1.0, make_shared<metal>(vec3(0.7, 0.6, 0.5), 0.0)));
 
-    return world;
+    //return world;
+    return static_cast<hittable_list>(make_shared<bvh_node>(world, 0, 1));
 }
 
 //main.cc
 int main()
 {
+    time_t nowtim = time(0);
+
     ofstream ou;
-    //ou.open(strtx);
-    ou.open(strho);
-    const int image_width = 500;
-    const int image_height = 250;
-    const int samples_per_pixel = 10;
+    ou.open(strtx);
+    //ou.open(strho);
+    const int image_width = 1000;
+    const int image_height = 500;
+    const int samples_per_pixel = 100;
     const int max_depth = 20;
 
     ou << "P3\n"
@@ -124,4 +129,5 @@ int main()
     }
 
     std::cerr << "\nDone.\n";
+    cout << time(0) - nowtim << endl;
 }
