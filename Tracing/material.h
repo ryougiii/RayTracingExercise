@@ -2,30 +2,54 @@
 #define MATERIAL_H
 #include "hittable_list.h"
 #include "ray.h"
+#include "texture.h"
 
 class material
 {
 public:
     virtual bool scatter(
         const ray &r_in, const hit_record &rec, vec3 &attenuation, ray &scattered) const = 0;
+
+    virtual vec3 emitted(double u, double v, const vec3 &p) const
+    {
+        return vec3(0, 0, 0);
+    }
 };
+
+// class lambertian : public material
+// {
+// public:
+//     lambertian(const vec3 &a) : albedo(a) {}
+
+//     virtual bool scatter(
+//         const ray &r_in, const hit_record &rec, vec3 &attenuation, ray &scattered) const
+//     {
+//         vec3 scatter_direction = rec.normal + random_unit_vector();
+//         scattered = ray(rec.p, scatter_direction), r_in.time();
+//         attenuation = albedo;
+//         return true;
+//     }
+
+// public:
+//     vec3 albedo;
+// };
 
 class lambertian : public material
 {
 public:
-    lambertian(const vec3 &a) : albedo(a) {}
+    lambertian(shared_ptr<texture> a) : albedo(a) {}
 
     virtual bool scatter(
         const ray &r_in, const hit_record &rec, vec3 &attenuation, ray &scattered) const
     {
         vec3 scatter_direction = rec.normal + random_unit_vector();
-        scattered = ray(rec.p, scatter_direction), r_in.time();
-        attenuation = albedo;
+        scattered = ray(rec.p, scatter_direction, r_in.time());
+        attenuation = albedo->value(rec.u, rec.v, rec.p);
         return true;
     }
 
 public:
-    vec3 albedo;
+    shared_ptr<texture> albedo;
 };
 
 class metal : public material
@@ -86,5 +110,25 @@ public:
 
 public:
     double ref_idx;
+};
+
+class diffuse_light : public material
+{
+public:
+    diffuse_light(shared_ptr<texture> a) : emit(a) {}
+
+    virtual bool scatter(
+        const ray &r_in, const hit_record &rec, vec3 &attenuation, ray &scattered) const
+    {
+        return false;
+    }
+
+    virtual vec3 emitted(double u, double v, const vec3 &p) const
+    {
+        return emit->value(u, v, p);
+    }
+
+public:
+    shared_ptr<texture> emit;
 };
 #endif

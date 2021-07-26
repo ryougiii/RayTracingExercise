@@ -5,6 +5,14 @@
 #include "hittable.h"
 #include "vec3.h"
 
+void get_sphere_uv(const vec3 &p, double &u, double &v)
+{
+    auto phi = atan2(p.z(), p.x());
+    auto theta = asin(p.y());
+    u = 1 - (phi + pi) / (2 * pi);
+    v = (theta + pi / 2) / pi;
+}
+
 class sphere : public hittable
 {
 public:
