@@ -3,7 +3,6 @@
 
 #include "perlin.h"
 #include "rtweekend.h"
-#include "texture.h"
 
 class texture
 {
