@@ -1,3 +1,4 @@
 # RayTracing
 result
-![image](https://user-images.githubusercontent.com/61556798/126749960-edd0c9fd-81b2-43bb-a41c-f8a7bc16e0fc.png)
+![光线追踪](https://user-images.githubusercontent.com/61556798/127358172-59b22d01-2f04-4ec8-ac7c-38ddfad7a867.jpg)
+
