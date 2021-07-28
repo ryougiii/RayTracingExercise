@@ -53,7 +53,8 @@ public:
 
     virtual vec3 value(double u, double v, const vec3 &p) const
     {
-        return vec3(1, 1, 1) * 0.5 * (1 + sin(scale * p.z() + 10 * noise.turb(p)));
+
+        return vec3(1, 1, 1) * 0.5 * (1 + sin(scale * p.z() / 100 + 50 * noise.turb(p / 100)));
     }
 
 public:
@@ -94,7 +95,7 @@ public:
         auto r = static_cast<int>(data[3 * i + 3 * nx * j + 0]) / 255.0;
         auto g = static_cast<int>(data[3 * i + 3 * nx * j + 1]) / 255.0;
         auto b = static_cast<int>(data[3 * i + 3 * nx * j + 2]) / 255.0;
-
+        //std::cout << r * 255 << ' ' << g * 255 << ' ' << b * 255 << std::endl;
         return vec3(r, g, b);
     }
 

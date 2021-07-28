@@ -74,7 +74,7 @@ hittable_list final_scene()
 
     objects.add(make_shared<bvh_node>(boxes1, 0, 1));
 
-    auto light = make_shared<diffuse_light>(make_shared<constant_texture>(vec3(7, 7, 7)));
+    auto light = make_shared<diffuse_light>(make_shared<constant_texture>(vec3(12, 12, 12)));
     objects.add(make_shared<xz_rect>(123, 423, 147, 412, 554, light));
 
     auto center1 = vec3(400, 400, 200);
@@ -90,16 +90,17 @@ hittable_list final_scene()
     auto boundary = make_shared<sphere>(vec3(360, 150, 145), 70, make_shared<dielectric>(1.5));
     objects.add(boundary);
     objects.add(make_shared<constant_medium>(
-        boundary, 0.2, make_shared<constant_texture>(vec3(0.2, 0.4, 0.9))));
-    boundary = make_shared<sphere>(vec3(0, 0, 0), 5000, make_shared<dielectric>(1.5));
+        boundary, 0.1, make_shared<constant_texture>(vec3(0.2, 0.4, 0.9))));
+
+    boundary = make_shared<sphere>(vec3(0, 0, 0), 5000, make_shared<dielectric>(1.5)); //全局
     objects.add(make_shared<constant_medium>(
-        boundary, .0001, make_shared<constant_texture>(vec3(1, 1, 1))));
+        boundary, .0002, make_shared<constant_texture>(vec3(1, 1, 1))));
 
     int nx, ny, nn;
     auto tex_data = stbi_load("earthmap.jpg", &nx, &ny, &nn, 0);
-
     auto emat = make_shared<lambertian>(make_shared<image_texture>(tex_data, nx, ny));
-    objects.add(make_shared<sphere>(vec3(400, 200, 400), 100, emat));
+    objects.add(make_shared<xy_rect>(100, 500, 100, 300, 400, emat));
+
     auto pertext = make_shared<noise_texture>(0.1);
     objects.add(make_shared<sphere>(vec3(220, 280, 300), 80, make_shared<lambertian>(pertext)));
 
@@ -124,12 +125,12 @@ int main()
     time_t nowtim = time(0);
 
     ofstream ou;
-    ou.open(strtx);
+    ou.open("C:\\Users\\jnjnjnzhang\\Documents\\GitHub\\RayTracing\\Tracing\\image5-0.ppm");
     //ou.open(strho);
-    const int image_width = 200;
-    const int image_height = 200;
-    const int samples_per_pixel = 100;
-    const int max_depth = 20;
+    const int image_width = 1000;
+    const int image_height = 1000;
+    const int samples_per_pixel = 10000;
+    const int max_depth = 10;
     const vec3 background(0, 0, 0);
 
     ou << "P3\n"
@@ -148,7 +149,7 @@ int main()
 
     camera cam(lookfrom, lookat, vup, vfov, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
 
-    for (int j = image_height - 1; j >= 0; --j)
+    for (int j = 50 - 1; j >= 0; --j)
     {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i)
